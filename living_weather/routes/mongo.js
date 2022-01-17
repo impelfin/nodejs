@@ -5,17 +5,39 @@ const request = require('request');
 const moment = require('moment');
 const dateutil = require('date-utils');
 
-var newDate = new Date();
-var now = newDate.toFormat("YYYYMMDDHH");
+let today = new Date();
+var now = today.toFormat("YYYYMMDDHH");
 
 var keys='B%2FNiJnYmkZV1%2FK7ulvZI4MoSXvCTDfNAd0Snw%2Bk6g4%2BbMk1LoGVhd75DJahjv4K35Cr9jh9RX0j%2BM89grKBYsw%3D%3D'
 var url = 'http://apis.data.go.kr/1360000/LivingWthrIdxServiceV2/getUVIdxV2';
-var queryParams = '?' + encodeURIComponent('serviceKey') + keys; /* Service Key*/
+var queryParams = '?' + encodeURIComponent('serviceKey') + '=' + keys; /* Service Key*/
 queryParams += '&' + encodeURIComponent('pageNo') + '=' + encodeURIComponent('1'); /* */
 queryParams += '&' + encodeURIComponent('numOfRows') + '=' + encodeURIComponent('10'); /* */
-queryParams += '&' + encodeURIComponent('dataType') + '=' + encodeURIComponent('XML'); /* */
-queryParams += '&' + encodeURIComponent('areaNo') + '=' + encodeURIComponent('1100000000'); /* */
+queryParams += '&' + encodeURIComponent('dataType') + '=' + encodeURIComponent('JSON'); /* */
+//queryParams += '&' + encodeURIComponent('areaNo') + '=' + encodeURIComponent('1100000000'); /* */
+queryParams += '&' + encodeURIComponent('areaNo') + '=' + encodeURIComponent(''); /* */
 queryParams += '&' + encodeURIComponent('time') + '=' + encodeURIComponent(now); /* */
+
+//define scheme
+var weatherSchema = mongoose.Schema({
+      code: String,
+      areaNo : Number,
+      date : String,
+      today : Number,
+      tomorrow : Number,
+      dayaftertomorrow : Number,
+      twodaysaftertomorrow : Number
+});
+
+var Weather = mongoose.model('weathers',weatherSchema);
+
+var gcodeSchema = mongoose.Schema({
+      '행정구역코드' : String,
+      '1단계' : String,
+      '2단계' : String
+});
+
+var Gcode = mongoose.model('gcode', gcodeSchema);
 
 // getdata
 router.get('/getdata', function(req, res, next) {
@@ -23,24 +45,32 @@ router.get('/getdata', function(req, res, next) {
       url: url + queryParams,
       method: 'GET'
   }, function (error, response, body) {
-      console.log('Status', response.statusCode);
-      console.log('Headers', JSON.stringify(response.headers));
-      console.log('Reponse received', body);
-      res.json(JSON.stringify(response));
+      //console.log('Status', response.statusCode);
+      //console.log('Headers', JSON.stringify(response.headers));
+      //console.log('Reponse received', body);
+
+      Weather.find({}).remove().exec();
+
+      let data = JSON.parse(body);
+      res.json(data);
+
+      for(i in data['response']['body']['items']['item']) {
+        code_v  = data['response']['body']['items']['item'][i]['code'];
+        areaNo_v  = data['response']['body']['items']['item'][i]['areaNo'];
+        date_v  = data['response']['body']['items']['item'][i]['date'];
+        today_v  = data['response']['body']['items']['item'][i]['today'];
+        tomorrow_v  = data['response']['body']['items']['item'][i]['tomorrow'];
+        dayaftertomorrow_v  = data['response']['body']['items']['item'][i]['dayaftertomorrow'];
+        twodaysaftertomorrow_v  = data['response']['body']['items']['item'][i]['twodaysaftertomorrow'];
+
+        var newWeather = new Weather({code : code_v, areaNo : areaNo_v, date : date_v, today : today_v, tomorrow : tomorrow_v, dayaftertomorrow : dayaftertomorrow_v, twodaysaftertomorrow : twodaysaftertomorrow_v});
+        newWeather.save(function(err, result) {
+          if (err) return console.error(err);
+          console.log(new Date(),result);
+        })
+      }
   });
 });
-
-//define scheme
-var weatherSchema = mongoose.Schema({
-      code: String,
-      areaNo : Number,
-      date : Date,
-      today : Number,
-      tomorrow : Number,
-      dayaftertomorrow : Number
-});
-
-var Weather = mongoose.model('weathers',weatherSchema);
 
 // list
 router.get('/list', function(req, res, next) {
@@ -67,12 +97,11 @@ router.get('/list', function(req, res, next) {
 router.get('/get', function(req, res, next) {
       db = req.db;
       var input = req.query.input
-      Weather.find({'date':{"$gte":input}},function(err,doc){
+      Weather.find({'areaNo':input},function(err,doc){
            if(err) console.log('err');
             res.send(doc);
       });
 });
-
 
 module.exports = router;
 

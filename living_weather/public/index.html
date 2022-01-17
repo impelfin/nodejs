@@ -7,11 +7,11 @@
 <body>
 <h1>Life Weather Data</h1>
 <form name='mongoform' >
-      <input type='button' value='Life - Weather Collection data' onclick='document.targetURL.location.href="/list"'>
       <input type='button' value='Life - Weather API get data' onclick='document.targetURL.location.href="/getdata"'>
       <p>
-      <label for="start">Date : </label>
-      <input type="date" id="date_t" size='10' name='input' value="2022-01-17">
+      <input type='button' value='Life - Weather Collection data' onclick='document.targetURL.location.href="/list"'>
+      <p>
+      areaNo <input type='text' size='12' name='input'>
       <input type='button' value='get' onclick='document.targetURL.location.href="/get?input="+document.mongoform.input.value'>
       <p>
 </form>
