@@ -107,6 +107,6 @@ module.exports = router;
 
 Weather.find({}).exec(function(err,weathers){
       console.log("Query 1");
-      console.log(weathers+"\n");
+      console.log(new Date(), weathers+"\n");
       return;
 });
