@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Life Weather Data</title>
+</head>
+<body>
+<h1>Life Weather Data</h1>
+<form name='mongoform' >
+      <input type='button' value='MongoDB data' onclick='document.targetURL.location.href="/list"'>
+      <p>
+      Date <input type='text' size='10' name='input'>
+      <input type='button' value='get' onclick='document.targetURL.location.href="/get?input="+document.mongoform.input.value'>
+      <p>
+</form>
+
+<iframe name=targetURL class="iframe-preview center" width="60%" height="500" style="border:none;" src="http://localhost/list"></iframe>
+
+</body>
+</html>
