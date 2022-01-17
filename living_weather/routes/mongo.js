@@ -6,12 +6,13 @@ const mongoose = require('mongoose');
 var weatherSchema = mongoose.Schema({
       code: String,
       areaNo : Number,
-      date : String,
+      date : Date,
       today : Number,
-      tomorror : Number
+      tomorrow : Number,
+      dayaftertomorrow : Number
 });
 
-var Weather = mongoose.model('weather',weatherSchema);
+var Weather = mongoose.model('weathers',weatherSchema);
 
 // list
 router.get('/list', function(req, res, next) {
@@ -38,7 +39,7 @@ router.get('/list', function(req, res, next) {
 router.get('/get', function(req, res, next) {
       db = req.db;
       var input = req.query.input
-      Weather.findOne({'date':input},function(err,doc){
+      Weather.find({'date':{"$gte":input}},function(err,doc){
            if(err) console.log('err');
             res.send(doc);
       });
@@ -47,8 +48,8 @@ router.get('/get', function(req, res, next) {
 
 module.exports = router;
 
-Weather.find({}).exec(function(err,weather){
+Weather.find({}).exec(function(err,weathers){
       console.log("Query 1");
-      console.log(weather+"\n");
+      console.log(weathers+"\n");
       return;
 });
