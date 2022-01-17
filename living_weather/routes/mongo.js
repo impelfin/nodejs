@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const request = require('request');
 const moment = require('moment');
 const dateutil = require('date-utils');
+const mongoClient = require('mongodb').MongoClient
 
 let today = new Date();
 var now = today.toFormat("YYYYMMDDHH");
@@ -30,14 +31,6 @@ var weatherSchema = mongoose.Schema({
 });
 
 var Weather = mongoose.model('weathers',weatherSchema);
-
-var gcodeSchema = mongoose.Schema({
-      '행정구역코드' : String,
-      '1단계' : String,
-      '2단계' : String
-});
-
-var Gcode = mongoose.model('gcode', gcodeSchema);
 
 // getdata
 router.get('/getdata', function(req, res, next) {
@@ -96,11 +89,18 @@ router.get('/list', function(req, res, next) {
 // get
 router.get('/get', function(req, res, next) {
       db = req.db;
-      var input = req.query.input
-      Weather.find({'areaNo':input},function(err,doc){
-           if(err) console.log('err');
-            res.send(doc);
-      });
+      var input = req.query.input;
+      if(input=='') {
+        Weather.findOne({},function(err,docs){
+          if(err) console.log('err');
+          res.send(docs);
+        });
+      } else {
+        Weather.find({'areaNo':input},function(err,docs){
+          if(err) console.log('err');
+          res.send(docs);
+        });
+      }
 });
 
 module.exports = router;
