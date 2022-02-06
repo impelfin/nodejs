@@ -26,7 +26,7 @@ const users = [
  */
 
 /**
- * @path {GET} http://localhost:3000/
+ * @path {GET} http://localhost:3000/Hello
  * @description 요청 데이터 값이 없고 반환 값이 있는 GET Method
  */
 app.get("/Hello", (req, res) => {
@@ -93,19 +93,17 @@ app.get("/api/users/:user_id", (req, res) => {
 
 
 /**
- * @path {GET} http://localhost:3000/api/users/userBody
- * @description Body 요청 데이터 값이 있고 반환 값이 있는 GET Method
- *
- *  post로 요청시 body에 데이터를 담아서 보낼수 있듯이 get도 사용이 가능하다.
+ * @path {POST} http://localhost:3000/api/users/userBody
+ * @description Body 요청 데이터 값이 있고 반환 값이 있는 POST Method
  */
-app.get("/api/users/userBody", (req, res) => {
+app.post("/api/users/userBody", (req, res) => {
 
-    const user_id = req.body.user_id
+    const user_id = req.body.id
 
     //filter라는 함수는 자바스크립트에서 배열 함수이다. 필터링을 할때 많이 사용된다 필터링한 데이터를 새로운 배열로 반환한다.
     const user = users.filter(data => data.id == user_id);
 
-    res.json({ok: false, user: user})
+    res.json({ok: true, user: user})
 })
 
 

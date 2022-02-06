@@ -7,23 +7,28 @@
 <body>
 <h1>Restful API Example</h1>
 ------------------------------------------------------------------<br>
-<h3>Get APIs</h3>
+<h4>Get APIs</h4>
 ------------------------------------------------------------------<br>
-<form method='post' action='/api/users/add' name='userForm' >
-      <input type='button' value='Hello World' onclick='document.targetURL.location.href="/Hello"'>
+<form method='post' action='/api/users/userBody' name='userForm' target=targetURL>
+      <input type='button' value='GET /Hello' onclick='document.targetURL.location.href="/Hello"'>
       <p>
-      <input type='button' value='/api/users' onclick='document.targetURL.location.href="/api/users"'>
+      <input type='button' value='GET /api/users' onclick='document.targetURL.location.href="/api/users"'>
       <p>
-      User ID <input type='text' size='10' name='id'>
-      <input type='button' value='get user_id' onclick='document.targetURL.location.href="/api/users/user?user_id="+document.userForm.id.value'>
+      id <input type='text' size='10' name='id'>
+      <input type='button' value='GET /api/users/user?params' onclick='document.targetURL.location.href="/api/users/user?user_id="+document.userForm.id.value'>
       &nbsp;
-      <input type='button' value=':user_id' onclick='document.targetURL.location.href="/api/users/"+document.userForm.id.value'>
+      <input type='button' value='GET /api/users/:user_id' onclick='document.targetURL.location.href="/api/users/"+document.userForm.id.value'>
       <p>
-      User Name <input type='text' size='10' name='name'>
+      name <input type='text' size='10' name='name'>
       <input type='button' value='get user_id & name' onclick='document.targetURL.location.href="/api/users/user?user_id="+document.userForm.id.value+"&name="+document.userForm.name.value'>
+      <br>
+------------------------------------------------------------------<br>
+<h4>POST APIs</h4>
+------------------------------------------------------------------<br>
+      <button type='submit' name='userBody' formaction='/api/users/userBody'>POST => /api/users/userBody</button>
       <p>
-      <input type='button' value='get userBody' onclick='document.targetURL.location.href="/api/users/userBody"'>
-      <p>
+      <button type='submit' name='add'  formaction='/api/users/add'>POST => /api/users/add</button>
+      <br>
 </form>
 ------------------------------------------------------------------<br>
 <iframe name=targetURL class="iframe-preview center" width="60%" height="500" style="border:none;" src="http://localhost:3000/api/users">
