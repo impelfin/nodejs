@@ -1,6 +1,7 @@
 //express 모듈 불러오기
 const express = require("express");
 const bodyParser = require('body-parser');
+const dfd = require('danfojs-node');
 
 //express 사용
 const app = express();
@@ -41,9 +42,24 @@ app.get("/Hello", (req, res) => {
  * @description 요청 데이터 값이 없고 반환 값이 있는 GET Method
  */
 app.get("/api/users", (req, res) => {
-
     //유저 정보 반환
-    res.json({ok: true, users: users});
+    //res.json({ok: true, users: users});
+
+    let df = new dfd.DataFrame(users);
+    df.print();
+    res.writeHead(200);
+    var template = `
+    <!doctype html>
+    <html>
+    <head>
+    <meta charset="utf-8">
+    </head>
+    <body>
+      ${df}
+    </body>
+    </html>
+   `;
+    res.end(template);
 })
 
 
