@@ -14,8 +14,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-var restful = require('./routes/temp.js');
-app.use('/', restful);
+var template = require('./routes/template.js');
+app.use('/', template);
 
 app.listen(app.get('port'), () =>{
 	console.log('3000 Port : 서버 실행 중')
