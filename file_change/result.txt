@@ -1,0 +1,3 @@
+url = "https://movie.daum.net/ranking/reservation"
+soup = BeautifulSoup(html, 'html.parser')
+html = urllib.request.urlopen(url)
