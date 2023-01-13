@@ -33,3 +33,42 @@ export function getSortedPostsData() {
     }
   })
 }
+
+export function getAllPostIds() {
+  const fileNames = fs.readdirSync(postsDirectory);
+
+  // 아래와 같은 형태로 파일명 리스트를 리턴한다.
+  // [
+  //   {
+  //     params: {
+  //       id: 'ssg-ssr'
+  //     }
+  //   },
+  //   {
+  //     params: {
+  //       id: 'pre-rendering'
+  //     }
+  //   }
+  // ]
+  return fileNames.map(fileName => {
+    return {
+      params: {
+        id: fileName.replace(/\.md$/, ""),
+      },
+    };
+  });
+}
+
+export function getPostData(id) {
+  const fullPath = path.join(postsDirectory, `${id}.md`);
+  const fileContents = fs.readFileSync(fullPath, "utf8");
+
+  // 포스트의 메타데이터를 파싱하기 위해 gray-matter 사용
+  const matterResult = matter(fileContents);
+
+  // 데이터를 id 와 병합시킨다.
+  return {
+    id,
+    ...matterResult.data,
+  };
+}

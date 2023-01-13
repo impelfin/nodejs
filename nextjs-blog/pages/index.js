@@ -24,14 +24,14 @@ export default function Home( allPostsData ) {
       <main>
         <h1 className="title">
           Read {' '}
-          <Link href="/posts/first-post">
+          <Link href="first-post">
             this Page!
           </Link>
         </h1>
 
         <h1 className="profile">
           Show {' '}
-          <Link href="/posts/profile">
+          <Link href="profile">
             profile
           </Link>
         </h1>
