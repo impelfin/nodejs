@@ -2,7 +2,18 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css';
 import Link from 'next/link'
 
-export default function Home() {
+import { getSortedPostsData } from '../lib/posts'
+
+export async function getStaticProps() {
+  const allPostsData = getSortedPostsData()
+  return {
+    props: {
+      allPostsData
+    }
+  }
+}
+
+export default function Home( allPostsData ) {
   return (
     <div className={styles.container}>
       <Head>
@@ -24,6 +35,22 @@ export default function Home() {
             profile
           </Link>
         </h1>
+
+        {/* 아래 <section> 태그로 감싸진 부분을 추가해준다. */}
+        <section >
+            <h2>Blog</h2>
+            <ul>
+                {allPostsData.allPostsData.map(({ id, date, title }) => (
+                    <li key={id}>
+                          {title}
+                            <br />
+                              {id}  
+                            <br />
+                          {date}
+                    </li>
+                ))}
+            </ul>
+        </section>
       </main>
 
       <footer>
