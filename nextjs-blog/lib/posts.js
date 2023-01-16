@@ -1,6 +1,9 @@
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
+// import remark from "remark";
+// import html from "remark-html";
+import marked  from 'marked'
 
 const postsDirectory = path.join(process.cwd(), 'posts')
 
@@ -59,16 +62,28 @@ export function getAllPostIds() {
   });
 }
 
-export function getPostData(id) {
+export async function getPostData(id) {
   const fullPath = path.join(postsDirectory, `${id}.md`);
   const fileContents = fs.readFileSync(fullPath, "utf8");
 
   // 포스트의 메타데이터를 파싱하기 위해 gray-matter 사용
   const matterResult = matter(fileContents);
 
+  // // remark 를 사용하여 마크다운을 HTML로 변환
+  // const processedContent = await remark()
+  //   .use(html)
+  //   .process(matterResult.content)
+  // const contentHtml = processedContent.toString()
+
+  const renderText = text => {
+    const contentHtml = marked(matterResult.content)
+    return { contentHtml }
+  }
+
   // 데이터를 id 와 병합시킨다.
   return {
     id,
+    renderText,
     ...matterResult.data,
   };
 }

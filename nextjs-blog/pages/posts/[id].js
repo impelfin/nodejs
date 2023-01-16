@@ -1,9 +1,15 @@
+import Head from 'next/head'
 import Layout from "../../components/layout";
+import Date from "../../components/date";
+
+import styles from '../../styles/Home.module.css';
 
 import { getAllPostIds, getPostData } from "../../lib/posts";
 
 export async function getStaticProps({ params }) {
-    const postData = getPostData(params.id);
+    const Data = await getPostData(params.id);
+    const postData = JSON.parse(JSON.stringify(Data))
+
     return {
       props: {
         postData,
@@ -20,13 +26,19 @@ export async function getStaticPaths() {
 }
 
 export default function Post({ postData }) {
-    return (
-        <Layout>
-          {postData.title}
-          <br />
-          {postData.id}
-          <br />
-          {postData.date}
-        </Layout>
-      );
+  return (
+    <Layout>
+      <Head>
+        <title>{postData.id}</title>
+      </Head>
+      <article>
+        <h1 className={styles.headingXl}>{postData.title}</h1>
+        <h3 className={styles.lightText}>{postData.id}</h3>
+        <div className={styles.lightText}>
+          <Date dateString={postData.date} />
+        </div>
+        <div dangerouslySetInnerHTML={{ __html: postData.string }} />
+      </article>
+    </Layout>
+  );
 }
