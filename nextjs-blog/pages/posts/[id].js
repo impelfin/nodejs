@@ -37,7 +37,9 @@ export default function Post({ postData }) {
         <div className={styles.lightText}>
           <Date dateString={postData.date} />
         </div>
-        <div dangerouslySetInnerHTML={{ __html: postData.string }} />
+        <div dangerouslySetInnerHTML={{ __html: postData.summary }} />
+        <br></br>
+        <div dangerouslySetInnerHTML={{ __html: postData.renderTexts }} />
       </article>
     </Layout>
   );
