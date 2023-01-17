@@ -29,6 +29,7 @@ export default function Home() {
     <div>
       <Head>
         <title>HOME | IMP</title>
+        <meta name="description" content="IMP Homepage!!"></meta>
       </Head>
       {isLoading && (
         <div style={{ padding: "300px 0" }}>
